@@ -89,7 +89,7 @@ function SkillPill({ skill }: { skill: typeof skills[0] }) {
         <div
             className={cn(
                 "flex-shrink-0 px-6 py-3 rounded-full border backdrop-blur-sm transition-all duration-300",
-                "bg-white/[0.02]",
+                "bg-card",
                 categoryColors[skill.category as keyof typeof categoryColors]
             )}
         >

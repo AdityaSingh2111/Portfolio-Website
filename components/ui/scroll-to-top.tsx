@@ -39,9 +39,9 @@ export function ScrollToTop() {
                     onClick={scrollToTop}
                     className={cn(
                         "fixed bottom-8 right-8 z-50 p-3 rounded-full",
-                        "bg-[hsl(var(--card-glass))] backdrop-blur-md border border-[hsl(var(--border))]",
-                        "text-foreground shadow-lg hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]",
-                        "hover:bg-[hsl(var(--primary)/0.1)] hover:border-[hsl(var(--primary)/0.3)]",
+                        "bg-card/90 dark:bg-card/80 backdrop-blur-2xl border border-border",
+                        "text-foreground shadow-lg shadow-black/10 dark:shadow-black/30",
+                        "hover:bg-primary/10 hover:border-primary/30",
                         "transition-all duration-300 group hidden md:flex" // Hidden on mobile as requested "on pc"
                     )}
                     aria-label="Scroll to top"

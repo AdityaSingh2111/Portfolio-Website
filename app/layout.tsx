@@ -1,18 +1,11 @@
 import type { Metadata, Viewport } from "next";
-
-export const viewport: Viewport = {
-    themeColor: "#000000",
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false, // Prevents zooming for a more native app feel
-};
 import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { ClientWrapper } from "@/components/layout/client-wrapper";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -89,22 +82,37 @@ export const metadata: Metadata = {
     },
 };
 
+export const viewport: Viewport = {
+    themeColor: "#000000",
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false, // Prevents zooming for a more native app feel
+};
+
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning>
             <body
                 className={`${inter.variable} ${instrumentSerif.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
             >
-                <ClientWrapper>
-                    <Navbar />
-                    <main>{children}</main>
-                    <Footer />
-                    <ScrollToTop />
-                </ClientWrapper>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <ClientWrapper>
+                        <Navbar />
+                        <main>{children}</main>
+                        <Footer />
+                        <ScrollToTop />
+                    </ClientWrapper>
+                </ThemeProvider>
             </body>
         </html>
     );

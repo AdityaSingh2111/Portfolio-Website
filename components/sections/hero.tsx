@@ -12,15 +12,20 @@ function StatusBadge({ className }: { className?: string }) {
     return (
         <div
             className={cn(
-                "inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 backdrop-blur-sm",
+                "inline-flex items-center gap-2 px-3 py-1.5 rounded-full",
+                "bg-emerald-500/10 dark:bg-emerald-500/15",
+                "border border-emerald-500/30 dark:border-emerald-500/20",
+                "backdrop-blur-sm shadow-sm",
                 className
             )}
         >
             <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="text-xs font-medium text-green-400 tracking-wide uppercase">Available for work</span>
+            <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 tracking-wide uppercase">
+                Available for work
+            </span>
         </div>
     );
 }
@@ -112,29 +117,34 @@ export function Hero() {
     return (
         <section
             id="hero"
-            className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-20 pb-12 md:py-0 bg-black"
+            className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-20 pb-12 md:py-0 bg-background"
         >
             {/* Background Atmosphere */}
             <div className="absolute inset-0 pointer-events-none">
+                {/* Dark Mode Spotlight - softer and blue-tinted */}
                 <Spotlight
                     className="-top-40 left-0 md:left-60 md:-top-20"
-                    fill="white"
+                    fill="hsl(var(--primary))"
+                    fillOpacity={0.15}
                 />
 
-                {/* Subtle Color Accents */}
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] opacity-20 animate-pulse" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-electric-cyan/20 rounded-full blur-[128px] opacity-20" />
+                {/* Light Mode - Subtle Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background dark:hidden" />
+
+                {/* Animated Orbs - visible in both modes but tuned */}
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 dark:bg-primary/10 rounded-full blur-[128px] opacity-40 dark:opacity-20 animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-electric-cyan/20 dark:bg-primary/5 rounded-full blur-[128px] opacity-30 dark:opacity-15" />
 
                 {/* Grain Noise Texture */}
                 <div
-                    className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                    className="absolute inset-0 opacity-[0.03] pointer-events-none"
                     style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
                     }}
                 />
 
-                {/* Cinematic Vignette */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.8)_100%)]" />
+                {/* Subtle edge vignette - only in dark mode */}
+                <div className="absolute inset-0 hidden dark:block bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.4)_100%)]" />
             </div>
 
             {/* Corner metadata - desktop only */}
@@ -158,7 +168,7 @@ export function Hero() {
                 animate="show"
                 className="hidden md:flex absolute top-12 right-12 items-center gap-3 text-muted-foreground"
             >
-                <div className="p-2 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm">
+                <div className="p-2 rounded-full bg-secondary/50 border border-border backdrop-blur-sm">
                     <MapPin className="h-4 w-4" />
                 </div>
                 <span className="text-sm font-medium uppercase tracking-[0.15em]">New Delhi, India</span>
@@ -222,7 +232,7 @@ export function Hero() {
                         {/* Name */}
                         <motion.h1
                             variants={item}
-                            className="text-fluid-hero font-bold tracking-tighter text-white leading-[0.9] mb-3 md:mb-4"
+                            className="text-fluid-hero font-bold tracking-tighter text-foreground leading-[0.9] mb-3 md:mb-4"
                         >
                             ADITYA
                             <br />
@@ -247,8 +257,8 @@ export function Hero() {
                             variants={item}
                             className="hidden lg:block text-lg text-muted-foreground max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed"
                         >
-                            High-performing Team Leader managing <span className="text-white font-medium">12 executives</span> with{" "}
-                            <span className="text-white font-medium">0% attrition</span>. Securing{" "}
+                            High-performing Team Leader managing <span className="text-foreground font-medium">12 executives</span> with{" "}
+                            <span className="text-foreground font-medium">0% attrition</span>. Securing{" "}
                             <span className="text-primary font-medium">#1 sales rank</span> while building IT infrastructure.
                         </motion.p>
 

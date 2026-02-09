@@ -9,6 +9,49 @@
 
 @layer base {
   :root {
+    /* Light Mode - Clean Professional Look */
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+
+    /* Glass surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --card-glass: 220 14% 96%;
+    --glass-surface: 0 0% 0% / 0.02;
+
+    /* Borders */
+    --border: 220 13% 91%;
+    --border-glow: 210 100% 60% / 0.2;
+
+    /* Muted */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Accents */
+    --primary: 217 91% 50%;
+    --primary-foreground: 0 0% 100%;
+    --electric-blue: 217 91% 50%;
+    --electric-cyan: 199 89% 48%;
+
+    /* Secondary */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Common */
+    --blur-sm: 8px;
+    --blur-md: 16px;
+    --blur-lg: 24px;
+    --blur-xl: 40px;
+
+    --radius-sm: 12px;
+    --radius-md: 20px;
+    --radius-lg: 28px;
+    --radius-xl: 36px;
+
+    --section-gap: 120px;
+  }
+
+  .dark {
     /* Pure black base */
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
@@ -16,7 +59,8 @@
     /* Glass surfaces */
     --card: 0 0% 4%;
     --card-foreground: 0 0% 98%;
-    --card-glass: 0 0% 100% / 0.03;
+    --card-glass: 0 0% 8%;
+    --glass-surface: 0 0% 100% / 0.03;
 
     /* Borders */
     --border: 0 0% 100% / 0.08;
@@ -35,21 +79,6 @@
     /* Secondary */
     --secondary: 0 0% 8%;
     --secondary-foreground: 0 0% 70%;
-
-    /* Glass blur levels */
-    --blur-sm: 8px;
-    --blur-md: 16px;
-    --blur-lg: 24px;
-    --blur-xl: 40px;
-
-    /* Radius - larger for premium feel */
-    --radius-sm: 12px;
-    --radius-md: 20px;
-    --radius-lg: 28px;
-    --radius-xl: 36px;
-
-    /* Spacing rhythm */
-    --section-gap: 120px;
   }
 
   * {
@@ -61,6 +90,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    color-scheme: light dark;
   }
 
   body {
@@ -68,6 +98,7 @@
     color: hsl(var(--foreground));
     font-feature-settings: "rlig" 1, "calt" 1;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Selection */

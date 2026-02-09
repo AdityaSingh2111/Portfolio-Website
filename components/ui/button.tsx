@@ -18,7 +18,7 @@ const buttonVariants = cva(
                 link:
                     "text-primary underline-offset-4 hover:underline",
                 glow:
-                    "relative bg-gradient-to-r from-electric-blue to-electric-cyan text-white font-semibold overflow-hidden group",
+                    "relative bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-semibold overflow-hidden group",
             },
             size: {
                 default: "h-11 px-6 py-2",

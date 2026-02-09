@@ -83,7 +83,7 @@ export function BentoGrid() {
                                         (tag) => (
                                             <span
                                                 key={tag}
-                                                className="px-4 py-2 rounded-full bg-white/[0.03] border border-[hsl(var(--border))] text-sm text-muted-foreground"
+                                                className="px-4 py-2 rounded-full bg-card border border-border text-sm text-muted-foreground"
                                             >
                                                 {tag}
                                             </span>
@@ -209,7 +209,7 @@ export function BentoGrid() {
                                     <motion.div
                                         key={tech}
                                         whileHover={{ scale: 1.05, y: -2 }}
-                                        className="px-6 py-3 rounded-2xl bg-white/[0.03] border border-[hsl(var(--border))] text-foreground font-medium hover:border-electric-cyan/30 transition-colors"
+                                        className="px-6 py-3 rounded-2xl bg-card border border-border text-foreground font-medium hover:border-primary/30 transition-colors"
                                     >
                                         {tech}
                                     </motion.div>

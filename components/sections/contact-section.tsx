@@ -133,7 +133,7 @@ export function ContactSection() {
                                             aria-label="Your name"
                                             className={cn(
                                                 "w-full px-4 py-3 rounded-xl",
-                                                "bg-white/[0.03] border border-[hsl(var(--border))]",
+                                                "bg-card border border-border",
                                                 "text-foreground placeholder:text-muted-foreground/50",
                                                 "focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20",
                                                 "transition-all duration-300"
@@ -158,7 +158,7 @@ export function ContactSection() {
                                             aria-label="Your email address"
                                             className={cn(
                                                 "w-full px-4 py-3 rounded-xl",
-                                                "bg-white/[0.03] border border-[hsl(var(--border))]",
+                                                "bg-card border border-border",
                                                 "text-foreground placeholder:text-muted-foreground/50",
                                                 "focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20",
                                                 "transition-all duration-300"
@@ -183,7 +183,7 @@ export function ContactSection() {
                                             aria-label="Your message"
                                             className={cn(
                                                 "w-full px-4 py-3 rounded-xl resize-none",
-                                                "bg-white/[0.03] border border-[hsl(var(--border))]",
+                                                "bg-card border border-border",
                                                 "text-foreground placeholder:text-muted-foreground/50",
                                                 "focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20",
                                                 "transition-all duration-300"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { Menu, X, Download } from "lucide-react";
@@ -84,7 +85,7 @@ function MagneticMenuItem({
                 "relative block px-6 py-4 rounded-2xl text-lg font-medium transition-colors duration-300",
                 "will-change-transform",
                 isActive
-                    ? "bg-white/[0.08] text-foreground"
+                    ? "bg-primary/10 text-foreground"
                     : "text-muted-foreground hover:text-foreground",
                 className
             )}
@@ -157,37 +158,63 @@ export function Navbar() {
         setAtTop(latest < 50);
     });
 
-    // Track active section
+    // Track active section using IntersectionObserver for smooth transitions
     useEffect(() => {
-        const handleScroll = () => {
-            const sections = document.querySelectorAll("section[id]");
+        const sectionIds = navItems.map(item => item.href.slice(1));
+        const observers: IntersectionObserver[] = [];
+        const visibilityMap = new Map<string, number>();
 
-            // Handle bottom of page - activate last section
-            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-                // Find the last visible section that is in navItems
-                const lastSectionId = navItems[navItems.length - 1].href.slice(1);
-                setActiveSection(lastSectionId);
-                return;
-            }
+        sectionIds.forEach(id => {
+            const section = document.getElementById(id);
+            if (!section) return;
 
-            // Normal scroll - check which section is in the upper third of screen
-            const viewPoint = window.scrollY + (window.innerHeight * 0.3);
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach(entry => {
+                        // Track intersection ratio for each section
+                        visibilityMap.set(id, entry.intersectionRatio);
 
-            sections.forEach((section) => {
-                const sectionTop = (section as HTMLElement).offsetTop;
-                const sectionHeight = (section as HTMLElement).offsetHeight;
+                        // Find section with highest visibility in the top portion of screen
+                        let maxRatio = 0;
+                        let activeId = "hero";
 
-                if (viewPoint >= sectionTop && viewPoint < sectionTop + sectionHeight) {
-                    setActiveSection(section.id);
+                        visibilityMap.forEach((ratio, sectionId) => {
+                            if (ratio > maxRatio) {
+                                maxRatio = ratio;
+                                activeId = sectionId;
+                            }
+                        });
+
+                        // Update if we have a visible section
+                        if (maxRatio > 0) {
+                            setActiveSection(activeId);
+                        }
+                    });
+                },
+                {
+                    // Observe the top 40% of viewport for better detection
+                    rootMargin: "-10% 0px -50% 0px",
+                    threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
                 }
-            });
+            );
+
+            observer.observe(section);
+            observers.push(observer);
+        });
+
+        // Handle edge case: when at bottom of page, activate last section
+        const handleScroll = () => {
+            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+                setActiveSection(sectionIds[sectionIds.length - 1]);
+            }
         };
 
-        // Initial check
-        handleScroll();
-
         window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+
+        return () => {
+            observers.forEach(obs => obs.disconnect());
+            window.removeEventListener("scroll", handleScroll);
+        };
     }, []);
 
     const handleNavClick = () => {
@@ -243,10 +270,10 @@ export function Navbar() {
                 <nav
                     className={cn(
                         "flex items-center gap-1 px-2 py-2 rounded-full",
-                        "backdrop-blur-xl border transition-all duration-400",
+                        "backdrop-blur-2xl border transition-all duration-400",
                         atTop
                             ? "bg-transparent border-transparent"
-                            : "bg-black/40 border-[hsl(var(--border))]"
+                            : "bg-card/90 dark:bg-card/70 border-border shadow-xl shadow-black/5 dark:shadow-black/20"
                     )}
                 >
                     {navItems.map((item) => (
@@ -263,7 +290,7 @@ export function Navbar() {
                             {activeSection === item.href.slice(1) && (
                                 <motion.div
                                     layoutId="activeSection"
-                                    className="absolute inset-0 bg-white/[0.08] rounded-full"
+                                    className="absolute inset-0 bg-primary/10 rounded-full"
                                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                                 />
                             )}
@@ -271,15 +298,9 @@ export function Navbar() {
                         </Link>
                     ))}
 
-                    {/* Resume button */}
-                    {/* <a
-                        href="/resume.pdf"
-                        download="Aditya_Kumar_Resume.pdf"
-                        className="ml-2 flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
-                    >
-                        <Download className="h-4 w-4" />
-                        Resume
-                    </a> */}
+                    <div className="pl-4 border-l border-muted-foreground/30 dark:border-border/50 ml-2">
+                        <ThemeToggle />
+                    </div>
                 </nav>
             </motion.header>
 
@@ -290,45 +311,52 @@ export function Navbar() {
                 transition={{ duration: 0.3 }}
                 className={cn(
                     "fixed top-0 left-0 right-0 z-[60] md:hidden",
-                    "backdrop-blur-xl border-b transition-colors duration-300",
+                    "backdrop-blur-2xl border-b transition-all duration-300",
                     atTop && !isOpen
                         ? "bg-transparent border-transparent"
-                        : "bg-black/80 border-[hsl(var(--border))]"
+                        : "bg-card/95 dark:bg-card/80 border-border shadow-lg shadow-black/5 dark:shadow-black/20"
                 )}
             >
                 <div className="flex items-center justify-between px-6 py-4">
                     <Link href="#hero" onClick={handleNavClick} className="text-xl font-bold text-foreground">
                         AK<span className="text-primary">.</span>
                     </Link>
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="p-2 text-foreground"
-                        aria-label="Toggle menu"
-                    >
-                        <AnimatePresence mode="wait">
-                            {isOpen ? (
-                                <motion.div
-                                    key="close"
-                                    initial={{ rotate: -90, opacity: 0 }}
-                                    animate={{ rotate: 0, opacity: 1 }}
-                                    exit={{ rotate: 90, opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                >
-                                    <X className="h-6 w-6" />
-                                </motion.div>
-                            ) : (
-                                <motion.div
-                                    key="menu"
-                                    initial={{ rotate: 90, opacity: 0 }}
-                                    animate={{ rotate: 0, opacity: 1 }}
-                                    exit={{ rotate: -90, opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                >
-                                    <Menu className="h-6 w-6" />
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </button>
+
+                    <div className="flex items-center gap-3">
+                        {/* Theme Toggle - Always visible */}
+                        <ThemeToggle />
+
+                        {/* Menu Button */}
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="p-2 text-foreground rounded-full hover:bg-secondary/30 transition-colors touch-manipulation"
+                            aria-label="Toggle menu"
+                        >
+                            <AnimatePresence mode="wait">
+                                {isOpen ? (
+                                    <motion.div
+                                        key="close"
+                                        initial={{ rotate: -90, opacity: 0 }}
+                                        animate={{ rotate: 0, opacity: 1 }}
+                                        exit={{ rotate: 90, opacity: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        <X className="h-6 w-6" />
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="menu"
+                                        initial={{ rotate: 90, opacity: 0 }}
+                                        animate={{ rotate: 0, opacity: 1 }}
+                                        exit={{ rotate: -90, opacity: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        <Menu className="h-6 w-6" />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </button>
+                    </div>
                 </div>
             </motion.header>
 
@@ -344,10 +372,7 @@ export function Navbar() {
                             exit="hidden"
                             transition={{ duration: 0.3 }}
                             onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 z-[55] md:hidden bg-black/70 backdrop-blur-md"
-                            style={{
-                                background: "radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.85) 100%)"
-                            }}
+                            className="fixed inset-0 z-[55] md:hidden bg-background/90 backdrop-blur-md"
                         />
 
                         {/* Menu Panel */}
@@ -359,13 +384,13 @@ export function Navbar() {
                             className={cn(
                                 "fixed top-[72px] left-4 right-4 z-[60] md:hidden",
                                 "p-4 rounded-3xl",
-                                "bg-[hsl(var(--card-glass))] backdrop-blur-2xl",
-                                "border border-[hsl(var(--border))]",
-                                "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
+                                "bg-card/95 dark:bg-card/90 backdrop-blur-2xl",
+                                "border border-border",
+                                "shadow-xl shadow-black/10 dark:shadow-black/30"
                             )}
                         >
                             {/* Specular highlight */}
-                            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-t-3xl" />
+                            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent rounded-t-3xl" />
 
                             <div className="flex flex-col gap-1">
                                 {navItems.map((item) => (
@@ -385,7 +410,7 @@ export function Navbar() {
                                     <a
                                         href="/resume.pdf"
                                         download="Aditya_Kumar_Resume.pdf"
-                                        className="flex items-center justify-center gap-2 mt-3 px-6 py-4 rounded-2xl bg-primary text-primary-foreground font-medium"
+                                        className="flex items-center justify-center gap-2 mt-2 px-6 py-4 rounded-2xl bg-primary text-primary-foreground font-medium shadow-lg shadow-primary/20"
                                     >
                                         <Download className="h-5 w-5" />
                                         Download Resume

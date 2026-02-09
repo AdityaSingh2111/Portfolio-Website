@@ -31,7 +31,7 @@ const timelineItems = [
         description:
             "Technical workflow analysis, quality control documentation, safety protocol adherence, and operational data logging.",
         color: "text-muted-foreground",
-        bgColor: "bg-white/5",
+        bgColor: "bg-card",
     },
     {
         id: 3,
@@ -122,8 +122,8 @@ export function Timeline() {
                                     <div className="hidden lg:flex lg:order-2 justify-center">
                                         <motion.div
                                             className={`w-16 h-16 rounded-2xl border-2 flex items-center justify-center bg-background ${item.type === "current"
-                                                    ? "border-primary glow-pulse"
-                                                    : "border-[hsl(var(--border))]"
+                                                ? "border-primary glow-pulse"
+                                                : "border-[hsl(var(--border))]"
                                                 }`}
                                             whileHover={{ scale: 1.1 }}
                                         >
@@ -180,12 +180,12 @@ function TimelineContent({
         <div className={align === "right" ? "text-right" : "text-left"}>
             <span
                 className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-3 ${item.type === "current"
-                        ? "bg-primary/10 text-primary"
-                        : item.type === "education"
-                            ? "bg-purple-400/10 text-purple-400"
-                            : item.type === "volunteering"
-                                ? "bg-pink-400/10 text-pink-400"
-                                : "bg-white/5 text-muted-foreground"
+                    ? "bg-primary/10 text-primary"
+                    : item.type === "education"
+                        ? "bg-purple-400/10 text-purple-400"
+                        : item.type === "volunteering"
+                            ? "bg-pink-400/10 text-pink-400"
+                            : "bg-card text-muted-foreground"
                     }`}
             >
                 {item.period}

@@ -64,7 +64,7 @@ export function Footer() {
                                     href={link.href}
                                     target={link.href.startsWith("http") ? "_blank" : undefined}
                                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                                    className="p-3 rounded-2xl border border-[hsl(var(--border))] bg-white/[0.02] text-muted-foreground hover:text-foreground hover:border-[hsl(var(--border-glow))] transition-all duration-300"
+                                    className="p-3 rounded-2xl border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
                                     aria-label={link.label}
                                 >
                                     <Icon className="h-5 w-5" />
