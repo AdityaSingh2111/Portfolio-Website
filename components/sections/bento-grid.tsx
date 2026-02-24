@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatedSection } from "@/components/ui/animated-section";
-import { LiquidCard } from "@/components/ui/liquid-glass";
+import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { motion } from "framer-motion";
 import {
     Briefcase,
@@ -25,7 +25,7 @@ const techStack = [
 export function BentoGrid() {
     return (
         <section id="about" className="section-padding relative">
-            <div className="mx-auto max-w-7xl px-6">
+            <div className="container-main">
                 <AnimatedSection className="text-center mb-16 md:mb-24">
                     <p className="text-fluid-xs text-primary uppercase tracking-[0.3em] mb-4">
                         About Me
@@ -47,7 +47,7 @@ export function BentoGrid() {
                         delay={0}
                         className="md:col-span-2 lg:col-span-8 lg:row-span-2"
                     >
-                        <LiquidCard className="h-full p-6 md:p-8 lg:p-10">
+                        <LiquidGlass className="h-full p-6 md:p-8 lg:p-10">
                             <div className="flex flex-col h-full">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="p-3 rounded-2xl bg-primary/10">
@@ -91,12 +91,12 @@ export function BentoGrid() {
                                     )}
                                 </div>
                             </div>
-                        </LiquidCard>
+                        </LiquidGlass>
                     </AnimatedSection>
 
                     {/* Quote Card */}
                     <AnimatedSection delay={0.1} className="lg:col-span-4">
-                        <LiquidCard className="h-full p-6 md:p-8 flex flex-col justify-center">
+                        <LiquidGlass className="h-full p-6 md:p-8 flex flex-col justify-center">
                             <Quote className="h-8 w-8 text-primary/40 mb-4" />
                             <p className="text-fluid-lg font-serif italic text-foreground leading-relaxed">
                                 &quot;Expert in Sales, Coding, and Operations.&quot;
@@ -104,12 +104,12 @@ export function BentoGrid() {
                             <p className="text-sm text-muted-foreground mt-4">
                                 — Professional Summary
                             </p>
-                        </LiquidCard>
+                        </LiquidGlass>
                     </AnimatedSection>
 
                     {/* Leadership Stats */}
                     <AnimatedSection delay={0.15} className="lg:col-span-4">
-                        <LiquidCard className="h-full p-6 md:p-8">
+                        <LiquidGlass className="h-full p-6 md:p-8">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 rounded-xl bg-purple-400/10">
                                     <Users className="h-5 w-5 text-purple-400" />
@@ -128,12 +128,12 @@ export function BentoGrid() {
                                     <p className="text-sm text-muted-foreground">Retention Rate</p>
                                 </div>
                             </div>
-                        </LiquidCard>
+                        </LiquidGlass>
                     </AnimatedSection>
 
                     {/* TractorShare Project */}
                     <AnimatedSection delay={0.2} className="lg:col-span-6">
-                        <LiquidCard className="h-full p-6 md:p-8">
+                        <LiquidGlass className="h-full p-6 md:p-8">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 rounded-xl bg-green-400/10">
                                     <Tractor className="h-5 w-5 text-green-400" />
@@ -157,12 +157,12 @@ export function BentoGrid() {
                                     Firebase
                                 </span>
                             </div>
-                        </LiquidCard>
+                        </LiquidGlass>
                     </AnimatedSection>
 
                     {/* VRL Projects */}
                     <AnimatedSection delay={0.25} className="lg:col-span-6">
-                        <LiquidCard className="h-full p-6 md:p-8">
+                        <LiquidGlass className="h-full p-6 md:p-8">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 rounded-xl bg-yellow-400/10">
                                     <Zap className="h-5 w-5 text-yellow-400" />
@@ -190,12 +190,12 @@ export function BentoGrid() {
                                     </li>
                                 ))}
                             </ul>
-                        </LiquidCard>
+                        </LiquidGlass>
                     </AnimatedSection>
 
                     {/* Tech Stack */}
                     <AnimatedSection delay={0.3} className="md:col-span-2 lg:col-span-12">
-                        <LiquidCard className="p-6 md:p-8">
+                        <LiquidGlass className="p-6 md:p-8">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 rounded-xl bg-electric-cyan/10">
                                     <Code className="h-5 w-5 text-electric-cyan" />
@@ -215,7 +215,7 @@ export function BentoGrid() {
                                     </motion.div>
                                 ))}
                             </div>
-                        </LiquidCard>
+                        </LiquidGlass>
                     </AnimatedSection>
                 </div>
             </div>

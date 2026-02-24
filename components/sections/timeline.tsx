@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatedSection } from "@/components/ui/animated-section";
-import { LiquidCard } from "@/components/ui/liquid-glass";
+import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Briefcase, GraduationCap, Building2, Heart } from "lucide-react";
@@ -67,7 +67,7 @@ export function Timeline() {
 
     return (
         <section id="timeline" className="section-padding relative overflow-hidden">
-            <div className="relative z-10 mx-auto max-w-5xl px-6">
+            <div className="relative z-10 container-narrow">
                 <AnimatedSection className="text-center mb-16 md:mb-24">
                     <p className="text-fluid-xs text-primary uppercase tracking-[0.3em] mb-4">
                         Journey
@@ -109,12 +109,9 @@ export function Timeline() {
                                             } hidden lg:block`}
                                     >
                                         {isEven && (
-                                            <LiquidCard
-                                                className="inline-block p-6"
-                                                tiltStrength={6}
-                                            >
+                                            <LiquidGlass className="inline-block p-6">
                                                 <TimelineContent item={item} align="right" />
-                                            </LiquidCard>
+                                            </LiquidGlass>
                                         )}
                                     </div>
 
@@ -122,7 +119,7 @@ export function Timeline() {
                                     <div className="hidden lg:flex lg:order-2 justify-center">
                                         <motion.div
                                             className={`w-16 h-16 rounded-2xl border-2 flex items-center justify-center bg-background ${item.type === "current"
-                                                ? "border-primary glow-pulse"
+                                                ? "border-primary glow-sm"
                                                 : "border-[hsl(var(--border))]"
                                                 }`}
                                             whileHover={{ scale: 1.1 }}
@@ -137,18 +134,15 @@ export function Timeline() {
                                             } hidden lg:block`}
                                     >
                                         {!isEven && (
-                                            <LiquidCard
-                                                className="inline-block p-6"
-                                                tiltStrength={6}
-                                            >
+                                            <LiquidGlass className="inline-block p-6">
                                                 <TimelineContent item={item} align="left" />
-                                            </LiquidCard>
+                                            </LiquidGlass>
                                         )}
                                     </div>
 
                                     {/* Mobile card */}
                                     <div className="lg:hidden">
-                                        <LiquidCard className="p-6" tiltStrength={4}>
+                                        <LiquidGlass className="p-6">
                                             <div className="flex items-start gap-4">
                                                 <div
                                                     className={`p-3 rounded-xl ${item.bgColor} shrink-0`}
@@ -157,7 +151,7 @@ export function Timeline() {
                                                 </div>
                                                 <TimelineContent item={item} align="left" />
                                             </div>
-                                        </LiquidCard>
+                                        </LiquidGlass>
                                     </div>
                                 </AnimatedSection>
                             );

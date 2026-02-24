@@ -2,7 +2,7 @@
 
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { Counter } from "@/components/ui/animated-section";
-import { LiquidCard } from "@/components/ui/liquid-glass";
+import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { TrendingUp, Users, Trophy, Clock } from "lucide-react";
 
 const metrics = [
@@ -52,7 +52,7 @@ export function ImpactMetrics() {
             {/* Subtle gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none" />
 
-            <div className="relative z-10 mx-auto max-w-7xl px-6">
+            <div className="relative z-10 container-main">
                 <AnimatedSection className="text-center mb-16 md:mb-24">
                     <p className="text-fluid-xs text-primary uppercase tracking-[0.3em] mb-4">
                         Key Metrics
@@ -71,7 +71,7 @@ export function ImpactMetrics() {
                         const Icon = metric.icon;
                         return (
                             <AnimatedSection key={metric.label} delay={index * 0.1}>
-                                <LiquidCard className="p-6 md:p-8 text-center h-full">
+                                <LiquidGlass className="p-6 md:p-8 text-center h-full">
                                     {/* Icon */}
                                     <div
                                         className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${metric.bgColor} mb-6`}
@@ -96,7 +96,7 @@ export function ImpactMetrics() {
                                     <p className="text-sm text-muted-foreground">
                                         {metric.sublabel}
                                     </p>
-                                </LiquidCard>
+                                </LiquidGlass>
                             </AnimatedSection>
                         );
                     })}

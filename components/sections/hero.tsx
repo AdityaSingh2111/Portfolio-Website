@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { MapPin, ArrowDown } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { MapPin, Download, ArrowRight, Share2, X } from "lucide-react";
 import { ProfilePhoto } from "@/components/ui/profile-photo";
-import { Spotlight } from "@/components/ui/spotlight";
-import { Counter } from "@/components/ui/animated-section";
+import { usePWAInstall } from "@/hooks/use-pwa-install";
 import { cn } from "@/lib/utils";
 
+/* ─── Status Badge ─── */
 function StatusBadge({ className }: { className?: string }) {
     return (
         <div
@@ -20,8 +20,8 @@ function StatusBadge({ className }: { className?: string }) {
             )}
         >
             <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
             <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 tracking-wide uppercase">
                 Available for work
@@ -30,271 +30,314 @@ function StatusBadge({ className }: { className?: string }) {
     );
 }
 
+/* ─── iOS Install Modal ─── */
+function IOSInstallModal({ onClose }: { onClose: () => void }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={onClose}
+        >
+            <motion.div
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 40, opacity: 0 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                onClick={(e) => e.stopPropagation()}
+                className={cn(
+                    "relative w-full max-w-sm p-6 rounded-2xl",
+                    "bg-card border border-border",
+                    "shadow-2xl"
+                )}
+            >
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 p-1 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Close"
+                >
+                    <X className="h-5 w-5" />
+                </button>
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 rounded-xl bg-primary/10">
+                        <Share2 className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">
+                        Install App
+                    </h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-1">
+                    To install this app on your device:
+                </p>
+                <ol className="text-sm text-muted-foreground space-y-2 mt-3">
+                    <li className="flex items-start gap-2">
+                        <span className="font-semibold text-foreground shrink-0">1.</span>
+                        <span>
+                            Tap the{" "}
+                            <span className="font-medium text-foreground">Share</span>{" "}
+                            button in your browser
+                        </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                        <span className="font-semibold text-foreground shrink-0">2.</span>
+                        <span>
+                            Scroll down and tap{" "}
+                            <span className="font-medium text-foreground">
+                                &ldquo;Add to Home Screen&rdquo;
+                            </span>
+                        </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                        <span className="font-semibold text-foreground shrink-0">3.</span>
+                        <span>
+                            Tap{" "}
+                            <span className="font-medium text-foreground">Add</span>
+                        </span>
+                    </li>
+                </ol>
+            </motion.div>
+        </motion.div>
+    );
+}
+
+/* ─── Animation variants (static — not re-created per render) ─── */
+const heroContainer = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1, delayChildren: 0.15 },
+    },
+};
+
+const heroItem = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+    },
+};
+
+const heroFadeIn = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { duration: 0.3, delay: 0.6 },
+    },
+};
+
+/* ─── Hero Section ─── */
 export function Hero() {
-    // Typewriter effect
-    const roles = [
-        "Business Development Team Leader",
-        "CRM Specialist",
-        "IT Specialist",
-    ];
+    const { isInstallable, isInstalled, isIOS, promptInstall } = usePWAInstall();
+    const [showIOSModal, setShowIOSModal] = useState(false);
 
-    const [currentRole, setCurrentRole] = useState(0);
-    const [displayText, setDisplayText] = useState("");
-    const [isTyping, setIsTyping] = useState(true);
-    const deleteIndexRef = useRef(0);
-
-    const role = roles[currentRole];
-
-    useEffect(() => {
-        if (isTyping) {
-            deleteIndexRef.current = role.length;
-        }
-    }, [isTyping, role.length]);
-
-    useEffect(() => {
-        let timeout: NodeJS.Timeout;
-
-        if (isTyping) {
-            let charIndex = 0;
-            const typeChar = () => {
-                if (charIndex <= role.length) {
-                    setDisplayText(role.slice(0, charIndex));
-                    charIndex++;
-                    timeout = setTimeout(typeChar, 50);
-                } else {
-                    timeout = setTimeout(() => setIsTyping(false), 2500);
-                }
-            };
-            typeChar();
+    const handleInstallClick = async () => {
+        if (isIOS) {
+            setShowIOSModal(true);
         } else {
-            const deleteChar = () => {
-                if (deleteIndexRef.current > 0) {
-                    deleteIndexRef.current--;
-                    setDisplayText(role.slice(0, deleteIndexRef.current));
-                    timeout = setTimeout(deleteChar, 30);
-                } else {
-                    setCurrentRole((prev) => (prev + 1) % roles.length);
-                    setIsTyping(true);
-                }
-            };
-            deleteChar();
+            await promptInstall();
         }
-
-        return () => clearTimeout(timeout);
-    }, [currentRole, isTyping, role]);
-
-    // Parallax scroll
-    const { scrollY } = useScroll();
-    const y = useTransform(scrollY, [0, 500], [0, 150]);
-    const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-
-    // Staggered animation variants
-    const container = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: { staggerChildren: 0.15, delayChildren: 0.3 },
-        },
-    };
-
-    const item = {
-        hidden: { opacity: 0, y: 40 },
-        show: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-        },
-    };
-
-    const fadeIn = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: { duration: 1, delay: 0.8 }
-        },
     };
 
     return (
         <section
             id="hero"
-            className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-20 pb-12 md:py-0 bg-background"
+            className="relative min-h-[100dvh] flex items-center overflow-hidden bg-background"
         >
-            {/* Background Atmosphere */}
+            {/* Minimal background — noise only, no blobs/gradient orbs */}
             <div className="absolute inset-0 pointer-events-none">
-                {/* Dark Mode Spotlight - softer and blue-tinted */}
-                <Spotlight
-                    className="-top-40 left-0 md:left-60 md:-top-20"
-                    fill="hsl(var(--primary))"
-                    fillOpacity={0.15}
-                />
+                {/* Light mode subtle gradient */}
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] via-background to-background dark:hidden" />
 
-                {/* Light Mode - Subtle Gradient Background */}
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background dark:hidden" />
-
-                {/* Animated Orbs - visible in both modes but tuned */}
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 dark:bg-primary/10 rounded-full blur-[128px] opacity-40 dark:opacity-20 animate-pulse" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-electric-cyan/20 dark:bg-primary/5 rounded-full blur-[128px] opacity-30 dark:opacity-15" />
-
-                {/* Grain Noise Texture */}
+                {/* Grain noise */}
                 <div
-                    className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                    className="absolute inset-0 opacity-[0.025] pointer-events-none"
                     style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
                     }}
                 />
-
-                {/* Subtle edge vignette - only in dark mode */}
-                <div className="absolute inset-0 hidden dark:block bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.4)_100%)]" />
             </div>
 
-            {/* Corner metadata - desktop only */}
+            {/* Corner metadata — desktop only */}
             <motion.div
-                variants={fadeIn}
+                variants={heroFadeIn}
                 initial="hidden"
                 animate="show"
-                className="hidden md:block absolute top-12 left-12 text-left"
+                className="hidden lg:block absolute top-8 left-8 xl:top-12 xl:left-12"
             >
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em] mb-1">
-                    Driving Growth Through
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-[0.2em] mb-1">
+                    Frontend Developer
                 </p>
-                <p className="text-base text-foreground font-semibold tracking-wide">
-                    Leadership & Technology
+                <p className="text-sm text-foreground font-semibold tracking-wide">
+                    React · Next.js · TypeScript
                 </p>
             </motion.div>
 
             <motion.div
-                variants={fadeIn}
+                variants={heroFadeIn}
                 initial="hidden"
                 animate="show"
-                className="hidden md:flex absolute top-12 right-12 items-center gap-3 text-muted-foreground"
+                className="hidden lg:flex absolute top-8 right-8 xl:top-12 xl:right-12 items-center gap-2.5 text-muted-foreground"
             >
-                <div className="p-2 rounded-full bg-secondary/50 border border-border backdrop-blur-sm">
-                    <MapPin className="h-4 w-4" />
+                <div className="p-1.5 rounded-full bg-secondary/50 border border-border backdrop-blur-sm">
+                    <MapPin className="h-3.5 w-3.5" />
                 </div>
-                <span className="text-sm font-medium uppercase tracking-[0.15em]">New Delhi, India</span>
+                <span className="text-xs font-medium uppercase tracking-[0.15em]">
+                    New Delhi, India
+                </span>
             </motion.div>
 
             <motion.div
-                variants={fadeIn}
+                variants={heroFadeIn}
                 initial="hidden"
                 animate="show"
-                className="hidden md:block absolute bottom-12 left-12"
+                className="hidden lg:block absolute bottom-8 left-8 xl:bottom-12 xl:left-12"
             >
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em] mb-1">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-[0.2em] mb-1">
                     Currently at
                 </p>
-                <p className="text-lg text-primary font-bold tracking-wide">
+                <p className="text-base text-primary font-bold tracking-wide">
                     VRL Logistics
                 </p>
             </motion.div>
 
+            {/* Main content — asymmetric 60/40 layout */}
             <motion.div
-                variants={fadeIn}
+                variants={heroContainer}
                 initial="hidden"
                 animate="show"
-                className="hidden md:block absolute bottom-12 right-12 text-right group cursor-default"
+                className="relative z-10 container-main w-full py-24 md:py-0"
             >
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em] mb-1 group-hover:text-primary transition-colors">
-                    Impact
-                </p>
-                <div className="flex items-baseline justify-end gap-1">
-                    <span className="text-3xl font-bold text-gradient-primary tracking-tight">₹</span>
-                    <Counter
-                        value={7}
-                        duration={2.5}
-                        className="text-3xl font-bold text-gradient-primary tracking-tight"
-                    />
-                    <span className="text-3xl font-bold text-gradient-primary tracking-tight">L+</span>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Monthly Revenue</p>
-            </motion.div>
-
-            {/* Main content - Tighter Layout */}
-            <motion.div
-                variants={container}
-                initial="hidden"
-                animate="show"
-                className="relative z-10 px-6 max-w-5xl mx-auto w-full"
-            >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-                    {/* Left: Text Content */}
-                    <div className="text-center md:text-left order-2 md:order-1">
-
-                        {/* Mobile Profile Photo & Badge Container */}
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-16 items-center">
+                    {/* Left — Text content (dominant) */}
+                    <div className="text-center lg:text-left order-2 lg:order-1 max-w-2xl mx-auto lg:mx-0">
+                        {/* Mobile: photo + badge */}
                         <motion.div
-                            variants={item}
-                            className="lg:hidden flex flex-col items-center justify-center mb-6"
+                            variants={heroItem}
+                            className="lg:hidden flex flex-col items-center mb-6"
                         >
                             <StatusBadge className="mb-4" />
-                            <ProfilePhoto className="w-[130px] h-[160px] sm:w-[160px] sm:h-[200px]" />
+                            <ProfilePhoto className="w-[140px] h-[175px] sm:w-[160px] sm:h-[200px]" />
+                        </motion.div>
+
+                        {/* Desktop: badge */}
+                        <motion.div
+                            variants={heroItem}
+                            className="hidden lg:block mb-6"
+                        >
+                            <StatusBadge />
                         </motion.div>
 
                         {/* Name */}
                         <motion.h1
-                            variants={item}
-                            className="text-fluid-hero font-bold tracking-tighter text-foreground leading-[0.9] mb-3 md:mb-4"
+                            variants={heroItem}
+                            className="text-fluid-hero font-bold tracking-tighter text-foreground leading-[0.95] mb-2 lg:mb-3"
                         >
                             ADITYA
                             <br />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-electric-cyan to-primary bg-[length:200%_auto] animate-shimmer">
-                                KUMAR
-                            </span>
+                            <span className="text-primary">KUMAR</span>
                         </motion.h1>
 
-                        {/* Typewriter role */}
-                        <motion.div
-                            variants={item}
-                            className="h-8 sm:h-10 md:h-12 flex items-center justify-center md:justify-start mb-4 md:mb-6"
-                        >
-                            <p className="text-fluid-lg md:text-2xl font-light text-muted-foreground tracking-wide">
-                                {displayText}
-                                <span className="inline-block w-[2px] h-5 lg:h-6 bg-electric-cyan ml-1 animate-pulse" />
-                            </p>
-                        </motion.div>
-
-                        {/* Tagline - Hidden on mobile for cleaner look */}
+                        {/* Role — static, no typewriter */}
                         <motion.p
-                            variants={item}
-                            className="hidden lg:block text-lg text-muted-foreground max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed"
+                            variants={heroItem}
+                            className="text-fluid-lg text-muted-foreground font-light tracking-wide mb-4 lg:mb-6"
                         >
-                            High-performing Team Leader managing <span className="text-foreground font-medium">12 executives</span> with{" "}
-                            <span className="text-foreground font-medium">0% attrition</span>. Securing{" "}
-                            <span className="text-primary font-medium">#1 sales rank</span> while building IT infrastructure.
+                            Frontend Developer &amp; React Specialist
+                        </motion.p>
+
+                        {/* Summary — desktop only */}
+                        <motion.p
+                            variants={heroItem}
+                            className="hidden lg:block text-base text-muted-foreground max-w-lg leading-relaxed mb-8"
+                        >
+                            Building performant web applications with{" "}
+                            <span className="text-foreground font-medium">React, Next.js, and TypeScript</span>.
+                            Shipping production code, leading teams, and solving real engineering problems.
                         </motion.p>
 
                         {/* CTAs */}
                         <motion.div
-                            variants={item}
-                            className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4"
+                            variants={heroItem}
+                            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3"
                         >
-                            <a
-                                href="/resume.pdf"
-                                download="Aditya_Kumar_Resume.pdf"
-                                className="group relative px-6 py-3 md:px-8 rounded-full bg-primary text-primary-foreground font-semibold overflow-hidden transition-transform duration-300 hover:scale-[1.02]"
-                            >
-                                <span className="relative z-10 w-full text-center">Download Resume</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-primary to-electric-cyan opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            </a>
+                            {/* Primary: Download App (PWA) */}
+                            {!isInstalled && isInstallable && (
+                                <button
+                                    onClick={handleInstallClick}
+                                    className={cn(
+                                        "press group relative px-6 py-3 rounded-full",
+                                        "bg-primary text-primary-foreground font-semibold",
+                                        "transition-colors duration-200",
+                                        "hover:bg-primary/90",
+                                        "flex items-center gap-2"
+                                    )}
+                                >
+                                    <Download className="h-4 w-4" />
+                                    Download App
+                                </button>
+                            )}
+
+                            {/* If already installed, show resume download as primary */}
+                            {isInstalled && (
+                                <a
+                                    href="/resume.pdf"
+                                    download="Aditya_Kumar_Resume.pdf"
+                                    className={cn(
+                                        "press group relative px-6 py-3 rounded-full",
+                                        "bg-primary text-primary-foreground font-semibold",
+                                        "transition-colors duration-200",
+                                        "hover:bg-primary/90",
+                                        "flex items-center gap-2"
+                                    )}
+                                >
+                                    <Download className="h-4 w-4" />
+                                    Download Resume
+                                </a>
+                            )}
+
+                            {/* If PWA not supported and not installed, show resume as primary */}
+                            {!isInstalled && !isInstallable && (
+                                <a
+                                    href="/resume.pdf"
+                                    download="Aditya_Kumar_Resume.pdf"
+                                    className={cn(
+                                        "press group relative px-6 py-3 rounded-full",
+                                        "bg-primary text-primary-foreground font-semibold",
+                                        "transition-colors duration-200",
+                                        "hover:bg-primary/90",
+                                        "flex items-center gap-2"
+                                    )}
+                                >
+                                    <Download className="h-4 w-4" />
+                                    Download Resume
+                                </a>
+                            )}
+
+                            {/* Secondary CTA */}
                             <a
                                 href="#about"
-                                className="px-6 py-3 md:px-8 rounded-full border border-[hsl(var(--border))] text-foreground font-medium hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
+                                className={cn(
+                                    "press px-6 py-3 rounded-full",
+                                    "border border-border text-foreground font-medium",
+                                    "hover:border-primary/50 hover:bg-primary/5",
+                                    "transition-all duration-200",
+                                    "flex items-center gap-2"
+                                )}
                             >
                                 View My Work
+                                <ArrowRight className="h-4 w-4" />
                             </a>
                         </motion.div>
                     </div>
 
-                    {/* Right: Profile Photo - Desktop Only */}
+                    {/* Right — Profile photo (desktop) */}
                     <motion.div
-                        variants={item}
-                        className="hidden md:flex justify-end order-1 md:order-2"
+                        variants={heroItem}
+                        className="hidden lg:flex justify-end order-1 lg:order-2"
                     >
-                        <div className="flex flex-col items-center">
-                            <StatusBadge className="mb-6" />
-                            <div className="relative">
-                                <ProfilePhoto className="md:w-[280px] md:h-[350px] lg:w-[320px] lg:h-[400px]" />
-                            </div>
-                        </div>
+                        <ProfilePhoto className="lg:w-[280px] lg:h-[350px] xl:w-[320px] xl:h-[400px]" />
                     </motion.div>
                 </div>
             </motion.div>
@@ -303,16 +346,26 @@ export function Hero() {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 2 }}
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
+                transition={{ delay: 1.5 }}
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20"
             >
                 <motion.div
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    animate={{ y: [0, 6, 0] }}
+                    transition={{
+                        duration: 1.5,
+                        repeat: 2,
+                        ease: "easeInOut",
+                    }}
+                    className="w-5 h-8 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-1"
                 >
-                    <ArrowDown className="h-5 w-5 text-muted-foreground/80" />
+                    <motion.div className="w-1 h-1.5 rounded-full bg-muted-foreground/50" />
                 </motion.div>
             </motion.div>
-        </section >
+
+            {/* iOS install modal */}
+            {showIOSModal && (
+                <IOSInstallModal onClose={() => setShowIOSModal(false)} />
+            )}
+        </section>
     );
 }

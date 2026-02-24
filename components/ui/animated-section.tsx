@@ -1,8 +1,10 @@
 "use client";
 
+import React, { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+
+/* ─── Animated Section (IntersectionObserver reveal) ─── */
 
 interface AnimatedSectionProps {
     children: React.ReactNode;
@@ -18,13 +20,13 @@ export function AnimatedSection({
     direction = "up",
 }: AnimatedSectionProps) {
     const ref = useRef<HTMLDivElement>(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const isInView = useInView(ref, { once: true, margin: "-80px" });
 
     const directionOffset = {
-        up: { y: 40, x: 0 },
-        down: { y: -40, x: 0 },
-        left: { y: 0, x: 40 },
-        right: { y: 0, x: -40 },
+        up: { y: 20, x: 0 },
+        down: { y: -20, x: 0 },
+        left: { y: 0, x: 20 },
+        right: { y: 0, x: -20 },
     };
 
     return (
@@ -44,9 +46,9 @@ export function AnimatedSection({
                     : undefined
             }
             transition={{
-                duration: 0.6,
+                duration: 0.3,
                 delay,
-                ease: [0.21, 0.47, 0.32, 0.98],
+                ease: [0.16, 1, 0.3, 1],
             }}
             className={className}
         >
@@ -54,6 +56,8 @@ export function AnimatedSection({
         </motion.div>
     );
 }
+
+/* ─── Stagger Children ─── */
 
 interface StaggerChildrenProps {
     children: React.ReactNode;
@@ -64,7 +68,7 @@ interface StaggerChildrenProps {
 export function StaggerChildren({
     children,
     className,
-    staggerDelay = 0.1,
+    staggerDelay = 0.08,
 }: StaggerChildrenProps) {
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
@@ -90,16 +94,18 @@ export function StaggerChildren({
 }
 
 export const staggerChildVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 16 },
     visible: {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 0.5,
-            ease: [0.21, 0.47, 0.32, 0.98],
+            duration: 0.3,
+            ease: [0.16, 1, 0.3, 1],
         },
     },
 };
+
+/* ─── Counter ─── */
 
 interface CounterProps {
     value: number;
@@ -127,12 +133,7 @@ export function Counter({
                 animate={isInView ? { opacity: 1 } : {}}
             >
                 {isInView ? (
-                    <motion.span
-                        initial={{ opacity: 1 }}
-                        animate={{ opacity: 1 }}
-                    >
-                        <CounterAnimation value={value} duration={duration} />
-                    </motion.span>
+                    <CounterAnimation value={value} duration={duration} />
                 ) : (
                     "0"
                 )}
@@ -149,16 +150,18 @@ function CounterAnimation({
     value: number;
     duration: number;
 }) {
-    const [displayValue, setDisplayValue] = React.useState(0);
-    const ref = useRef<HTMLSpanElement>(null);
+    const [displayValue, setDisplayValue] = useState(0);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const startTime = Date.now();
         const endTime = startTime + duration * 1000;
 
         const updateValue = () => {
             const now = Date.now();
-            const progress = Math.min((now - startTime) / (duration * 1000), 1);
+            const progress = Math.min(
+                (now - startTime) / (duration * 1000),
+                1
+            );
             const easeOutQuart = 1 - Math.pow(1 - progress, 4);
             setDisplayValue(Math.floor(easeOutQuart * value));
 
@@ -172,7 +175,5 @@ function CounterAnimation({
         requestAnimationFrame(updateValue);
     }, [value, duration]);
 
-    return <span ref={ref}>{displayValue}</span>;
+    return <span>{displayValue}</span>;
 }
-
-import React from "react";

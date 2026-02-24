@@ -1,38 +1,36 @@
 import { ImageResponse } from "next/og";
 
+// Static apple icon — no external dependencies
 export const runtime = "edge";
 
-// Image metadata
 export const size = {
-    width: 32,
-    height: 32,
+    width: 180,
+    height: 180,
 };
 export const contentType = "image/png";
 
-// Image generation
-export default function Icon() {
+export default function AppleIcon() {
     return new ImageResponse(
         (
-            // ImageResponse JSX element
             <div
                 style={{
-                    fontSize: 24,
-                    background: "black",
+                    fontSize: 96,
+                    background: "linear-gradient(135deg, #2563eb, #06b6d4)",
                     width: "100%",
                     height: "100%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     color: "white",
-                    borderRadius: "8px", // iOS doesn't want transparency, simple square/rounded is fine
+                    borderRadius: "40px",
+                    fontFamily: "system-ui, sans-serif",
+                    fontWeight: 700,
+                    letterSpacing: "-0.05em",
                 }}
             >
-                A
+                AK
             </div>
         ),
-        // ImageResponse options
-        {
-            ...size,
-        }
+        { ...size }
     );
 }

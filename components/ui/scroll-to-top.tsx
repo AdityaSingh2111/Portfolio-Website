@@ -1,24 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ScrollToTop() {
     const [isVisible, setIsVisible] = useState(false);
+    const sentinelRef = useRef<HTMLDivElement | null>(null);
 
+    // IO sentinel: placed at ~500px from top. When it leaves viewport, show button.
     useEffect(() => {
-        const toggleVisibility = () => {
-            if (window.scrollY > 500) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
-        };
+        const sentinel = document.createElement("div");
+        sentinel.style.cssText =
+            "position:absolute;top:500px;left:0;width:1px;height:1px;pointer-events:none;";
+        document.body.prepend(sentinel);
+        sentinelRef.current = sentinel;
 
-        window.addEventListener("scroll", toggleVisibility);
-        return () => window.removeEventListener("scroll", toggleVisibility);
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // Sentinel is at 500px. If not intersecting, user scrolled past 500px.
+                setIsVisible(!entry.isIntersecting);
+            },
+            { threshold: 1.0 }
+        );
+        observer.observe(sentinel);
+
+        return () => {
+            observer.disconnect();
+            sentinel.remove();
+        };
     }, []);
 
     const scrollToTop = () => {
@@ -42,7 +53,7 @@ export function ScrollToTop() {
                         "bg-card/90 dark:bg-card/80 backdrop-blur-2xl border border-border",
                         "text-foreground shadow-lg shadow-black/10 dark:shadow-black/30",
                         "hover:bg-primary/10 hover:border-primary/30",
-                        "transition-all duration-300 group hidden md:flex" // Hidden on mobile as requested "on pc"
+                        "transition-all duration-300 group hidden md:flex"
                     )}
                     aria-label="Scroll to top"
                 >

@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 /* ===================================
-   LIQUID GLASS DESIGN SYSTEM
-   Premium dark theme with glass morphism
+   DESIGN SYSTEM — Feb 2026
+   Clean dark theme with liquid glass
    =================================== */
 
 @layer base {
   :root {
-    /* Light Mode - Clean Professional Look */
+    /* Light Mode */
     --background: 0 0% 98%;
     --foreground: 222 47% 11%;
 
@@ -37,46 +37,51 @@
     --secondary: 220 14% 96%;
     --secondary-foreground: 222 47% 11%;
 
-    /* Common */
+    /* Blur */
     --blur-sm: 8px;
     --blur-md: 16px;
     --blur-lg: 24px;
     --blur-xl: 40px;
 
+    /* Radius */
     --radius-sm: 12px;
     --radius-md: 20px;
     --radius-lg: 28px;
     --radius-xl: 36px;
 
-    --section-gap: 120px;
+    /* Spacing scale (fluid) */
+    --space-xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);
+    --space-sm: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+    --space-md: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+    --space-lg: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+    --space-xl: clamp(2rem, 1.5rem + 3vw, 4rem);
+    --space-2xl: clamp(3rem, 2rem + 5vw, 6rem);
+    --space-3xl: clamp(4rem, 2.5rem + 7vw, 8rem);
+
+    /* Section gap */
+    --section-gap: clamp(4rem, 3rem + 5vw, 8rem);
   }
 
   .dark {
-    /* Pure black base */
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
 
-    /* Glass surfaces */
     --card: 0 0% 4%;
     --card-foreground: 0 0% 98%;
     --card-glass: 0 0% 8%;
     --glass-surface: 0 0% 100% / 0.03;
 
-    /* Borders */
     --border: 0 0% 100% / 0.08;
     --border-glow: 0 0% 100% / 0.15;
 
-    /* Muted */
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 55%;
 
-    /* Accents */
     --primary: 210 100% 60%;
     --primary-foreground: 0 0% 100%;
     --electric-blue: 210 100% 60%;
     --electric-cyan: 185 100% 55%;
 
-    /* Secondary */
     --secondary: 0 0% 8%;
     --secondary-foreground: 0 0% 70%;
   }
@@ -101,18 +106,38 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Selection */
   ::selection {
     background: hsl(var(--primary) / 0.3);
     color: hsl(var(--foreground));
   }
+
+  /* Offset anchor scroll for fixed navbar height */
+  [id] {
+    scroll-margin-top: 80px;
+  }
 }
 
 /* ===================================
-   LIQUID GLASS UTILITIES
+   CONTAINER SYSTEM
    =================================== */
 
 @layer components {
+
+  /* Global container — max-width centered with fluid inline padding */
+  .container-main {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
+
+  /* Narrow container for text-heavy sections */
+  .container-narrow {
+    width: 100%;
+    max-width: 768px;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
 
   /* Base glass panel */
   .glass {
@@ -129,7 +154,7 @@
     border: 1px solid hsl(var(--border-glow));
   }
 
-  /* Liquid highlight - cursor tracked */
+  /* Liquid highlight — cursor tracked */
   .liquid-highlight {
     position: relative;
     overflow: hidden;
@@ -183,37 +208,11 @@
     opacity: 1;
   }
 
-  /* Glow effects */
+  /* Glow effect */
   .glow-sm {
     box-shadow:
       0 0 20px -5px hsl(var(--primary) / 0.3),
       0 0 40px -10px hsl(var(--primary) / 0.2);
-  }
-
-  .glow-md {
-    box-shadow:
-      0 0 30px -5px hsl(var(--primary) / 0.4),
-      0 0 60px -10px hsl(var(--primary) / 0.2);
-  }
-
-  .glow-pulse {
-    animation: glow-pulse 3s ease-in-out infinite;
-  }
-
-  @keyframes glow-pulse {
-
-    0%,
-    100% {
-      box-shadow:
-        0 0 20px -5px hsl(var(--primary) / 0.3),
-        0 0 40px -10px hsl(var(--primary) / 0.15);
-    }
-
-    50% {
-      box-shadow:
-        0 0 30px -5px hsl(var(--primary) / 0.5),
-        0 0 60px -10px hsl(var(--primary) / 0.25);
-    }
   }
 
   /* Noise texture overlay */
@@ -249,15 +248,29 @@
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.5);
   }
+
+  /* LiquidGlass — mobile: solid bg, no backdrop-filter.
+     Desktop: backdrop-filter enabled via custom property. */
+  .liquid-glass {
+    background: hsl(var(--card-glass));
+  }
+
+  @media (min-width: 769px) {
+    .liquid-glass {
+      background: hsl(var(--card-glass) / 0.6);
+      backdrop-filter: blur(var(--lg-blur, 10px));
+      -webkit-backdrop-filter: blur(var(--lg-blur, 10px));
+    }
+  }
 }
 
 /* ===================================
-   TYPOGRAPHY UTILITIES
+   TYPOGRAPHY
    =================================== */
 
 @layer utilities {
 
-  /* Fluid typography */
+  /* Fluid typography — tightened ranges for controlled scaling */
   .text-fluid-xs {
     font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
   }
@@ -283,15 +296,15 @@
   }
 
   .text-fluid-3xl {
-    font-size: clamp(2rem, 1rem + 4vw, 3.5rem);
+    font-size: clamp(2rem, 1.25rem + 3.5vw, 3.25rem);
   }
 
   .text-fluid-4xl {
-    font-size: clamp(2.5rem, 1rem + 6vw, 5rem);
+    font-size: clamp(2.5rem, 1.5rem + 4.5vw, 4.5rem);
   }
 
   .text-fluid-hero {
-    font-size: clamp(3rem, 1rem + 10vw, 8rem);
+    font-size: clamp(2.5rem, 1.5rem + 5vw, 5.5rem);
   }
 
   /* Gradient text */
@@ -315,11 +328,33 @@
     padding-bottom: var(--section-gap);
   }
 
-  @media (max-width: 768px) {
-    .section-padding {
-      padding-top: calc(var(--section-gap) * 0.6);
-      padding-bottom: calc(var(--section-gap) * 0.6);
-    }
+  /* Micro-interactions — GPU-safe, transform+opacity only */
+  .press {
+    transition: transform 150ms ease;
+  }
+
+  .press:active {
+    transform: scale(0.97);
+  }
+
+  .hover-lift {
+    transition: transform 200ms ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Section reveal — used with IntersectionObserver */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -370,7 +405,6 @@
   animation: marquee-reverse 45s linear infinite;
 }
 
-/* Pause on hover for better accessibility/UX */
 .animate-marquee:hover,
 .animate-marquee-reverse:hover {
   animation-play-state: paused;

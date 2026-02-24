@@ -51,7 +51,7 @@ export function SkillsMarquee() {
             <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-            <div className="mx-auto max-w-7xl px-6 mb-12">
+            <div className="container-main mb-12">
                 <p className="text-center text-fluid-xs text-primary uppercase tracking-[0.3em] mb-4">
                     Expertise
                 </p>

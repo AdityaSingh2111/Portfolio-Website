@@ -60,35 +60,23 @@ const config: Config = {
                 "section": "var(--section-gap)",
             },
             animation: {
-                "float": "float 6s ease-in-out infinite",
-                "float-slow": "float 10s ease-in-out infinite",
-                "glow-pulse": "glow-pulse 3s ease-in-out infinite",
-                "shimmer": "shimmer 2.5s linear infinite",
-                "fade-in": "fade-in 0.6s ease-out forwards",
-                "fade-up": "fade-up 0.6s ease-out forwards",
-                "scale-in": "scale-in 0.5s ease-out forwards",
+                "fade-in": "fade-in 0.3s ease-out forwards",
+                "fade-up": "fade-up 0.3s ease-out forwards",
+                "scale-in": "scale-in 0.25s ease-out forwards",
                 "slide-left": "slide-left 30s linear infinite",
                 "slide-right": "slide-right 35s linear infinite",
             },
             keyframes: {
-                float: {
-                    "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
-                    "50%": { transform: "translateY(-20px) rotate(2deg)" },
-                },
-                shimmer: {
-                    "0%": { backgroundPosition: "-200% 0" },
-                    "100%": { backgroundPosition: "200% 0" },
-                },
                 "fade-in": {
                     "0%": { opacity: "0" },
                     "100%": { opacity: "1" },
                 },
                 "fade-up": {
-                    "0%": { opacity: "0", transform: "translateY(30px)" },
+                    "0%": { opacity: "0", transform: "translateY(20px)" },
                     "100%": { opacity: "1", transform: "translateY(0)" },
                 },
                 "scale-in": {
-                    "0%": { opacity: "0", transform: "scale(0.95)" },
+                    "0%": { opacity: "0", transform: "scale(0.97)" },
                     "100%": { opacity: "1", transform: "scale(1)" },
                 },
                 "slide-left": {
@@ -106,7 +94,6 @@ const config: Config = {
             },
             transitionDuration: {
                 "400": "400ms",
-                "600": "600ms",
             },
         },
     },
