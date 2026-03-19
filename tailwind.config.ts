@@ -95,6 +95,11 @@ const config: Config = {
             transitionDuration: {
                 "400": "400ms",
             },
+            boxShadow: {
+                "card-hover": "0 20px 40px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px hsl(var(--primary) / 0.1)",
+                "card-hover-dark": "0 20px 40px -12px rgba(0, 0, 0, 0.4), 0 0 30px -5px hsl(var(--primary) / 0.15)",
+                "glow-primary": "0 0 20px -5px hsl(var(--primary) / 0.3), 0 0 40px -10px hsl(var(--primary) / 0.2)",
+            },
         },
     },
     plugins: [],

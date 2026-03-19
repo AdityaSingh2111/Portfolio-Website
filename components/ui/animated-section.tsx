@@ -23,10 +23,10 @@ export function AnimatedSection({
     const isInView = useInView(ref, { once: true, margin: "-80px" });
 
     const directionOffset = {
-        up: { y: 20, x: 0 },
-        down: { y: -20, x: 0 },
-        left: { y: 0, x: 20 },
-        right: { y: 0, x: -20 },
+        up: { y: 40, x: 0 },
+        down: { y: -40, x: 0 },
+        left: { y: 0, x: 40 },
+        right: { y: 0, x: -40 },
     };
 
     return (
@@ -46,9 +46,9 @@ export function AnimatedSection({
                     : undefined
             }
             transition={{
-                duration: 0.3,
+                duration: 0.5,
                 delay,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.22, 1, 0.36, 1],
             }}
             className={className}
         >
@@ -100,7 +100,7 @@ export const staggerChildVariants = {
         y: 0,
         transition: {
             duration: 0.3,
-            ease: [0.16, 1, 0.3, 1],
+            ease: [0.22, 1, 0.36, 1],
         },
     },
 };

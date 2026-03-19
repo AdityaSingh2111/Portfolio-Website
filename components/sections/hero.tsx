@@ -106,16 +106,16 @@ const heroContainer = {
     hidden: { opacity: 0 },
     show: {
         opacity: 1,
-        transition: { staggerChildren: 0.1, delayChildren: 0.15 },
+        transition: { staggerChildren: 0.12, delayChildren: 0.15 },
     },
 };
 
 const heroItem = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 24 },
     show: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
     },
 };
 
@@ -123,7 +123,7 @@ const heroFadeIn = {
     hidden: { opacity: 0 },
     show: {
         opacity: 1,
-        transition: { duration: 0.3, delay: 0.6 },
+        transition: { duration: 0.5, delay: 0.8 },
     },
 };
 
@@ -145,8 +145,12 @@ export function Hero() {
             id="hero"
             className="relative min-h-[100dvh] flex items-center overflow-hidden bg-background"
         >
-            {/* Minimal background — noise only, no blobs/gradient orbs */}
+            {/* Animated background — gradient orbs + noise */}
             <div className="absolute inset-0 pointer-events-none">
+                {/* Animated gradient orbs */}
+                <div className="hero-gradient-orb hero-gradient-orb-1" />
+                <div className="hero-gradient-orb hero-gradient-orb-2" />
+
                 {/* Light mode subtle gradient */}
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] via-background to-background dark:hidden" />
 
@@ -230,14 +234,18 @@ export function Hero() {
                         </motion.div>
 
                         {/* Name */}
-                        <motion.h1
-                            variants={heroItem}
-                            className="text-fluid-hero font-bold tracking-tighter text-foreground leading-[0.95] mb-2 lg:mb-3"
-                        >
-                            ADITYA
-                            <br />
-                            <span className="text-primary">KUMAR</span>
-                        </motion.h1>
+                        <div className="relative">
+                            {/* Radial spotlight behind heading */}
+                            <div className="absolute inset-0 hero-spotlight pointer-events-none -z-10" />
+                            <motion.h1
+                                variants={heroItem}
+                                className="text-fluid-hero font-bold tracking-tighter text-foreground leading-[0.95] mb-3 lg:mb-4"
+                            >
+                                ADITYA
+                                <br />
+                                <span className="text-primary text-glow">KUMAR</span>
+                            </motion.h1>
+                        </div>
 
                         {/* Role — static, no typewriter */}
                         <motion.p
@@ -250,7 +258,7 @@ export function Hero() {
                         {/* Summary — desktop only */}
                         <motion.p
                             variants={heroItem}
-                            className="hidden lg:block text-base text-muted-foreground max-w-lg leading-relaxed mb-8"
+                            className="hidden lg:block text-base text-muted-foreground prose-body mb-8"
                         >
                             Building performant web applications with{" "}
                             <span className="text-foreground font-medium">React, Next.js, and TypeScript</span>.

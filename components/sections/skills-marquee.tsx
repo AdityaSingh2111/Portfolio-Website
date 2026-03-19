@@ -33,10 +33,10 @@ const skills = [
 ];
 
 const categoryColors = {
-    leadership: "border-purple-400/20 text-purple-300 hover:border-purple-400/50 hover:bg-purple-400/5",
-    business: "border-green-400/20 text-green-300 hover:border-green-400/50 hover:bg-green-400/5",
-    tech: "border-[hsl(var(--electric-cyan)/0.2)] text-[hsl(var(--electric-cyan))] hover:border-[hsl(var(--electric-cyan)/0.5)] hover:bg-[hsl(var(--electric-cyan)/0.05)]",
-    ops: "border-yellow-400/20 text-yellow-300 hover:border-yellow-400/50 hover:bg-yellow-400/5",
+    leadership: "border-purple-400/20 text-purple-600 dark:text-purple-300 hover:border-purple-400/40 hover:bg-purple-400/5",
+    business: "border-green-400/20 text-green-600 dark:text-green-300 hover:border-green-400/40 hover:bg-green-400/5",
+    tech: "border-[hsl(var(--electric-cyan)/0.2)] text-[hsl(var(--primary))] dark:text-[hsl(var(--electric-cyan))] hover:border-[hsl(var(--electric-cyan)/0.4)] hover:bg-[hsl(var(--electric-cyan)/0.05)]",
+    ops: "border-yellow-400/20 text-yellow-600 dark:text-yellow-300 hover:border-yellow-400/40 hover:bg-yellow-400/5",
 };
 
 export function SkillsMarquee() {
@@ -46,11 +46,12 @@ export function SkillsMarquee() {
     const duplicatedRow2 = [...row2, ...row2, ...row2, ...row2];
 
     return (
-        <section id="skills" className="section-padding overflow-hidden relative">
+        <section id="skills" className="section-tight overflow-hidden relative">
             {/* Fade edges */}
             <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
+            {/* Static heading — stillness contrasts with moving pills */}
             <div className="container-main mb-12">
                 <p className="text-center text-fluid-xs text-primary uppercase tracking-[0.3em] mb-4">
                     Expertise
@@ -88,7 +89,9 @@ function SkillPill({ skill }: { skill: typeof skills[0] }) {
     return (
         <div
             className={cn(
-                "flex-shrink-0 px-6 py-3 rounded-full border backdrop-blur-sm transition-all duration-300",
+                "flex-shrink-0 px-6 py-3 rounded-full border backdrop-blur-sm",
+                "transition-all duration-200",
+                "hover:scale-[1.02]",
                 "bg-card",
                 categoryColors[skill.category as keyof typeof categoryColors]
             )}

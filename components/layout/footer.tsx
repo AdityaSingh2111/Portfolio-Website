@@ -37,7 +37,7 @@ export function Footer() {
             {/* Subtle gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-primary/[0.02] to-transparent pointer-events-none" />
 
-            <div className="relative z-10 mx-auto max-w-7xl px-6 py-16">
+            <div className="relative z-10 mx-auto max-w-7xl px-6 py-20">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
                     {/* Brand */}
                     <div className="text-center lg:text-left">
@@ -64,7 +64,7 @@ export function Footer() {
                                     href={link.href}
                                     target={link.href.startsWith("http") ? "_blank" : undefined}
                                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                                    className="p-3 rounded-2xl border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
+                                    className="p-3 rounded-2xl border border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/20 hover:scale-105 hover:-translate-y-0.5 transition-all duration-200"
                                     aria-label={link.label}
                                 >
                                     <Icon className="h-5 w-5" />

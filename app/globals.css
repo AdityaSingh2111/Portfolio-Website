@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 /* ===================================
-   DESIGN SYSTEM — Feb 2026
-   Clean dark theme with liquid glass
+   DESIGN SYSTEM — Mar 2026
+   Premium dark theme with liquid glass
+   Awwwards-level animations & polish
    =================================== */
 
 @layer base {
@@ -58,8 +59,10 @@
     --space-2xl: clamp(3rem, 2rem + 5vw, 6rem);
     --space-3xl: clamp(4rem, 2.5rem + 7vw, 8rem);
 
-    /* Section gap */
+    /* Section gap — rhythm variation */
     --section-gap: clamp(4rem, 3rem + 5vw, 8rem);
+    --section-gap-tight: clamp(3rem, 2.5rem + 3vw, 5.5rem);
+    --section-gap-loose: clamp(5rem, 4rem + 6vw, 10rem);
   }
 
   .dark {
@@ -262,6 +265,80 @@
       -webkit-backdrop-filter: blur(var(--lg-blur, 10px));
     }
   }
+
+  /* Hover card — clean lift + shadow, no colored glow */
+  .hover-card {
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hover-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.12);
+  }
+
+  .dark .hover-card:hover {
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Section alternating background */
+  .section-alt {
+    background: hsl(var(--muted) / 0.3);
+  }
+
+  .dark .section-alt {
+    background: hsl(0 0% 2%);
+  }
+
+  /* ── Depth layers ── */
+
+  .depth-bg {
+    background: hsl(var(--background));
+  }
+
+  .depth-surface {
+    background: hsl(var(--card));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .dark .depth-surface {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .depth-elevated {
+    background: hsl(var(--card));
+    box-shadow:
+      0 4px 12px -2px rgba(0, 0, 0, 0.06),
+      0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .dark .depth-elevated {
+    box-shadow:
+      0 4px 12px -2px rgba(0, 0, 0, 0.3),
+      0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Soft section overlap / fade transition */
+  .section-divider-soft {
+    position: relative;
+  }
+
+  .section-divider-soft::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, hsl(var(--background)));
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .section-alt .section-divider-soft::after,
+  .section-alt.section-divider-soft::after {
+    background: linear-gradient(to bottom, transparent, hsl(var(--muted) / 0.3));
+  }
 }
 
 /* ===================================
@@ -330,7 +407,13 @@
 
   /* Micro-interactions — GPU-safe, transform+opacity only */
   .press {
-    transition: transform 150ms ease;
+    transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.15s ease;
+  }
+
+  .press:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px -4px hsl(var(--primary) / 0.2);
   }
 
   .press:active {
@@ -338,11 +421,76 @@
   }
 
   .hover-lift {
-    transition: transform 200ms ease;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .hover-lift:hover {
     transform: translateY(-4px);
+  }
+
+  /* Input focus glow — kept as the primary interactive glow */
+  .input-glow:focus {
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow:
+      0 0 0 3px hsl(var(--primary) / 0.1),
+      0 0 16px -4px hsl(var(--primary) / 0.12);
+  }
+
+  /* Text glow — very subtle luminance behind accent text */
+  .text-glow {
+    text-shadow: 0 0 60px hsl(var(--primary) / 0.2);
+  }
+
+  /* Radial spotlight — for hero heading background */
+  .hero-spotlight {
+    background: radial-gradient(ellipse 600px 300px at 50% 50%,
+        hsl(var(--primary) / 0.06),
+        transparent);
+    animation: spotlight-breathe 6s ease-in-out infinite;
+  }
+
+  .dark .hero-spotlight {
+    background: radial-gradient(ellipse 600px 300px at 50% 50%,
+        hsl(var(--primary) / 0.04),
+        transparent);
+  }
+
+  @keyframes spotlight-breathe {
+
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* Spacing rhythm utilities */
+  .section-tight {
+    padding-top: var(--section-gap-tight);
+    padding-bottom: var(--section-gap-tight);
+  }
+
+  .section-loose {
+    padding-top: var(--section-gap-loose);
+    padding-bottom: var(--section-gap-loose);
+  }
+
+  /* Prose body — max-width + comfortable reading */
+  .prose-body {
+    max-width: 70ch;
+    line-height: 1.75;
+  }
+
+  /* Section divider — subtle gradient between sections */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right,
+        transparent,
+        hsl(var(--border)),
+        transparent);
   }
 
   /* Section reveal — used with IntersectionObserver */
@@ -359,6 +507,72 @@
 }
 
 /* ===================================
+   HERO ANIMATED GRADIENT
+   =================================== */
+
+@keyframes hero-glow {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.5;
+  }
+}
+
+@keyframes hero-glow-2 {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.35;
+  }
+}
+
+.hero-gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero-gradient-orb-1 {
+  width: 600px;
+  height: 600px;
+  top: 30%;
+  left: 20%;
+  background: hsl(var(--primary) / 0.05);
+  animation: hero-glow 12s ease-in-out infinite;
+}
+
+.hero-gradient-orb-2 {
+  width: 400px;
+  height: 400px;
+  top: 60%;
+  right: 15%;
+  background: hsl(var(--electric-cyan) / 0.04);
+  animation: hero-glow-2 15s ease-in-out infinite;
+}
+
+.dark .hero-gradient-orb-1 {
+  background: hsl(var(--primary) / 0.04);
+}
+
+.dark .hero-gradient-orb-2 {
+  background: hsl(var(--electric-cyan) / 0.03);
+}
+
+/* ===================================
    REDUCED MOTION
    =================================== */
 
@@ -370,6 +584,10 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .hero-gradient-orb {
+    animation: none !important;
   }
 }
 

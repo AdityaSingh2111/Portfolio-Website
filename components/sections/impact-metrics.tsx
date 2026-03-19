@@ -48,12 +48,13 @@ const metrics = [
 
 export function ImpactMetrics() {
     return (
-        <section id="impact" className="section-padding relative overflow-hidden">
+        <section id="impact" className="section-tight relative overflow-hidden section-divider-soft">
             {/* Subtle gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none" />
 
             <div className="relative z-10 container-main">
-                <AnimatedSection className="text-center mb-16 md:mb-24">
+                {/* Static heading — intentional stillness */}
+                <div className="text-center mb-16 md:mb-24">
                     <p className="text-fluid-xs text-primary uppercase tracking-[0.3em] mb-4">
                         Key Metrics
                     </p>
@@ -64,14 +65,16 @@ export function ImpactMetrics() {
                             at VRL Logistics
                         </span>
                     </h2>
-                </AnimatedSection>
+                </div>
 
+                {/* Organic stagger — slight variation avoids robotic feel */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {metrics.map((metric, index) => {
                         const Icon = metric.icon;
+                        const organicDelays = [0, 0.08, 0.18, 0.24];
                         return (
-                            <AnimatedSection key={metric.label} delay={index * 0.1}>
-                                <LiquidGlass className="p-6 md:p-8 text-center h-full">
+                            <AnimatedSection key={metric.label} delay={organicDelays[index] ?? index * 0.1}>
+                                <LiquidGlass hoverable className="p-6 md:p-8 text-center h-full">
                                     {/* Icon */}
                                     <div
                                         className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${metric.bgColor} mb-6`}

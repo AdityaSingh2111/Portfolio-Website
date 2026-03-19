@@ -312,7 +312,7 @@ export function Navbar() {
                     x: "-50%",
                     opacity: 1,
                 }}
-                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                 className="fixed top-6 left-1/2 z-50 hidden md:block"
             >
                 <nav
@@ -384,7 +384,7 @@ export function Navbar() {
             <motion.header
                 initial={{ y: -100 }}
                 animate={{ y: hidden && !isOpen ? -100 : 0 }}
-                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
                     "fixed top-0 left-0 right-0 z-[60] md:hidden",
                     "backdrop-blur-2xl border-b",

@@ -28,7 +28,7 @@ export function ContactSection() {
     };
 
     return (
-        <section id="contact" className="section-padding relative overflow-hidden">
+        <section id="contact" className="section-loose relative overflow-hidden">
             {/* Ambient background glow */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-[hsl(var(--primary)/0.05)] blur-[100px] -translate-y-1/2" />
@@ -50,7 +50,7 @@ export function ContactSection() {
                             <span className="text-gradient-primary">Meaningful</span>
                         </h2>
 
-                        <p className="text-fluid-base text-muted-foreground leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+                        <p className="text-fluid-base text-muted-foreground prose-body mb-8 mx-auto lg:mx-0">
                             I&apos;m always open to discussing new opportunities, innovative projects,
                             or meaningful collaborations. Whether you&apos;re looking for a{" "}
                             <span className="text-foreground">team leader</span>,{" "}
@@ -73,7 +73,7 @@ export function ContactSection() {
 
                     {/* Right Side - Contact Card */}
                     <AnimatedSection delay={0.2}>
-                        <LiquidGlass className="p-6 md:p-8 relative">
+                        <LiquidGlass hoverable className="p-6 md:p-8 relative">
                             {/* Static subtle top-corner gradient — replaces cursor-tracked glow */}
                             <div
                                 className="absolute inset-0 pointer-events-none rounded-3xl z-0 opacity-40"
@@ -107,8 +107,8 @@ export function ContactSection() {
                                             "w-full px-4 py-3 rounded-xl",
                                             "bg-card border border-border",
                                             "text-foreground placeholder:text-muted-foreground/50",
-                                            "focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20",
-                                            "transition-colors duration-200"
+                                            "focus:outline-none input-glow",
+                                            "transition-all duration-300"
                                         )}
                                     />
                                 </div>
@@ -132,8 +132,8 @@ export function ContactSection() {
                                             "w-full px-4 py-3 rounded-xl",
                                             "bg-card border border-border",
                                             "text-foreground placeholder:text-muted-foreground/50",
-                                            "focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20",
-                                            "transition-colors duration-200"
+                                            "focus:outline-none input-glow",
+                                            "transition-all duration-300"
                                         )}
                                     />
                                 </div>
@@ -157,8 +157,8 @@ export function ContactSection() {
                                             "w-full px-4 py-3 rounded-xl resize-none",
                                             "bg-card border border-border",
                                             "text-foreground placeholder:text-muted-foreground/50",
-                                            "focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20",
-                                            "transition-colors duration-200"
+                                            "focus:outline-none input-glow",
+                                            "transition-all duration-300"
                                         )}
                                     />
                                 </div>

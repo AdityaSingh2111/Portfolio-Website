@@ -66,7 +66,7 @@ export function Timeline() {
     const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
     return (
-        <section id="timeline" className="section-padding relative overflow-hidden">
+        <section id="timeline" className="section-loose relative overflow-hidden section-alt section-divider-soft">
             <div className="relative z-10 container-narrow">
                 <AnimatedSection className="text-center mb-16 md:mb-24">
                     <p className="text-fluid-xs text-primary uppercase tracking-[0.3em] mb-4">
@@ -109,7 +109,7 @@ export function Timeline() {
                                             } hidden lg:block`}
                                     >
                                         {isEven && (
-                                            <LiquidGlass className="inline-block p-6">
+                                            <LiquidGlass hoverable className="inline-block p-6">
                                                 <TimelineContent item={item} align="right" />
                                             </LiquidGlass>
                                         )}
@@ -134,7 +134,7 @@ export function Timeline() {
                                             } hidden lg:block`}
                                     >
                                         {!isEven && (
-                                            <LiquidGlass className="inline-block p-6">
+                                            <LiquidGlass hoverable className="inline-block p-6">
                                                 <TimelineContent item={item} align="left" />
                                             </LiquidGlass>
                                         )}
@@ -142,7 +142,7 @@ export function Timeline() {
 
                                     {/* Mobile card */}
                                     <div className="lg:hidden">
-                                        <LiquidGlass className="p-6">
+                                        <LiquidGlass hoverable className="p-6">
                                             <div className="flex items-start gap-4">
                                                 <div
                                                     className={`p-3 rounded-xl ${item.bgColor} shrink-0`}

@@ -18,6 +18,8 @@ interface LiquidGlassProps {
     noise?: boolean;
     /** Show subtle gradient glow overlay */
     glow?: boolean;
+    /** Enable hover lift + shadow + border glow interaction */
+    hoverable?: boolean;
     /** HTML element to render as */
     as?: "div" | "section" | "article";
 }
@@ -28,6 +30,7 @@ export function LiquidGlass({
     blur = 10,
     noise = true,
     glow = false,
+    hoverable = false,
     as: Component = "div",
 }: LiquidGlassProps) {
     return (
@@ -37,6 +40,7 @@ export function LiquidGlass({
                 "border border-white/[0.08] dark:border-white/[0.06]",
                 "bg-white/[0.04] dark:bg-white/[0.03]",
                 "transition-colors duration-200",
+                hoverable && "hover-card",
                 className
             )}
             style={{
